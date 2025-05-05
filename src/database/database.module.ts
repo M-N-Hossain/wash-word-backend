@@ -14,7 +14,7 @@ import { DataSource } from 'typeorm';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        url: configService.get<string>('DATABASE_URL'),
+        url: configService.get<string>('DATABASE_URL_LOCAL'),
         autoLoadEntities: true,
         synchronize: true, // only in dev
       }),
