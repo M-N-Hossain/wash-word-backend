@@ -27,7 +27,7 @@ export class DatabaseModule implements OnModuleInit {
   async onModuleInit() {
     try {
       await this.dataSource.query('SELECT 1');
-      console.log('✅ Connected to Supabase PostgreSQL successfully!');
+      console.log('✅ Connected to PostgreSQL database successfully!');
     } catch (err) {
       console.error('❌ Failed to connect to database:', err);
     }
