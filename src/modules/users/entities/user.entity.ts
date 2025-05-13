@@ -1,3 +1,4 @@
+import { Membership } from 'src/common/enums/membership.enum';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -21,7 +22,7 @@ export class User {
   password: string;
 
   @Column()
-  membership: string;
+  membership: Membership;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;

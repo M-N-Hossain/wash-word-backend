@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { Membership } from 'src/common/enums/membership.enum';
 
 export class CreateUserDto {
   @IsString()
@@ -23,7 +24,7 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  membership: string;
+  membership: Membership;
 
   createdAt: Date;
   updatedAt: Date;
