@@ -1,5 +1,6 @@
 import { Membership } from 'src/common/enums/membership.enum';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Wash } from 'src/modules/wash/entities/wash.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
@@ -29,4 +30,7 @@ export class User {
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updatedAt: Date;
+
+  @OneToMany(() => Wash, (wash) => wash.user)
+  washes: Wash[];
 }
