@@ -1,5 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { SubscriptionService } from '../../subscriptions/entities/subscription-service.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('services')
 export class Service {
@@ -14,7 +13,4 @@ export class Service {
 
   @Column({ name: 'description', type: 'varchar' })
   description: string;
-
-  @OneToMany(() => SubscriptionService, (subService) => subService.service)
-  subscriptionServices: SubscriptionService[];
 }

@@ -3,14 +3,16 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Membership } from 'src/common/enums/membership.enum';
 import { Repository } from 'typeorm';
+import { FeedbackReport } from '../feedback/entities/feedback-report.entity';
 import { WashLocation } from '../locations/entities/wash-location.entity';
 import { Problem } from '../problems/entities/problem.entity';
 import { Reward } from '../rewards/entities/reward.entity';
+import { UserReward } from '../rewards/entities/user-reward.entity';
 import { Service } from '../services/entities/service.entity';
-import { SubscriptionService } from '../subscriptions/entities/subscription-service.entity';
 import { Subscription } from '../subscriptions/entities/subscription.entity';
 import { User } from '../users/entities/user.entity';
 import { WashHall } from '../wash-halls/entities/wash-hall.entity';
+import { Wash } from '../washes/entities/wash.entity';
 
 @Injectable()
 export class MockService implements OnModuleInit {
@@ -27,10 +29,15 @@ export class MockService implements OnModuleInit {
     private subscriptionRepository: Repository<Subscription>,
     @InjectRepository(Service)
     private serviceRepository: Repository<Service>,
-    @InjectRepository(SubscriptionService)
-    private subscriptionServiceRepository: Repository<SubscriptionService>,
+
     @InjectRepository(Reward)
     private rewardRepository: Repository<Reward>,
+    @InjectRepository(UserReward)
+    private userRewardRepository: Repository<UserReward>,
+    @InjectRepository(FeedbackReport)
+    private feedbackReportRepository: Repository<FeedbackReport>,
+    @InjectRepository(Wash)
+    private washRepository: Repository<Wash>,
   ) {}
 
   async onModuleInit() {
@@ -44,28 +51,33 @@ export class MockService implements OnModuleInit {
 
   async seedDatabase() {
     // Create services
-    const services = await this.createServices();
 
     // Create subscriptions
     const subscriptions = await this.createSubscriptions();
-
-    // Link subscriptions with services
-    await this.linkSubscriptionsToServices(subscriptions, services);
 
     // Create locations
     const locations = await this.createLocations();
 
     // Create wash halls
-    await this.createWashHalls(locations);
+    const washHalls = await this.createWashHalls(locations);
 
     // Create problems
-    await this.createProblems();
+    const problems = await this.createProblems();
 
     // Create rewards
-    await this.createRewards();
+    const rewards = await this.createRewards();
 
     // Create users
-    await this.createUsers(subscriptions[0].id);
+    const users = await this.createUsers(subscriptions[0].id);
+
+    // Create user rewards
+    await this.createUserRewards(users, rewards);
+
+    // Create washes
+    const washes = await this.createWashes(users, washHalls, rewards);
+
+    // Create feedback reports
+    await this.createFeedbackReports(users, problems, washes);
   }
 
   async createServices() {
@@ -110,49 +122,24 @@ export class MockService implements OnModuleInit {
   async createSubscriptions() {
     const subscriptions = [
       {
-        tierName: 'Basic',
-        description: 'Basic subscription with limited washes',
+        tierName: 'Gold',
+        description: 'Gold subscription with limited washes',
         price: 19.99,
       },
       {
-        tierName: 'Standard',
-        description: 'Standard subscription with more features',
+        tierName: 'Premium',
+        description: 'Premium subscription with more features',
         price: 29.99,
       },
       {
-        tierName: 'Premium',
-        description: 'Premium subscription with all features',
+        tierName: 'Brilliant',
+        description: 'Brilliant subscription with all features',
         price: 49.99,
       },
     ];
 
     return await Promise.all(
       subscriptions.map((sub) => this.subscriptionRepository.save(sub)),
-    );
-  }
-
-  async linkSubscriptionsToServices(subscriptions, services) {
-    const subscriptionServices = [
-      // Basic subscription gets basic wash only
-      { subscriptionId: subscriptions[0].id, serviceId: services[0].id },
-
-      // Standard subscription gets basic and premium wash
-      { subscriptionId: subscriptions[1].id, serviceId: services[0].id },
-      { subscriptionId: subscriptions[1].id, serviceId: services[1].id },
-
-      // Premium subscription gets all services
-      { subscriptionId: subscriptions[2].id, serviceId: services[0].id },
-      { subscriptionId: subscriptions[2].id, serviceId: services[1].id },
-      { subscriptionId: subscriptions[2].id, serviceId: services[2].id },
-      { subscriptionId: subscriptions[2].id, serviceId: services[3].id },
-      { subscriptionId: subscriptions[2].id, serviceId: services[4].id },
-      { subscriptionId: subscriptions[2].id, serviceId: services[5].id },
-    ];
-
-    return await Promise.all(
-      subscriptionServices.map((subService) =>
-        this.subscriptionServiceRepository.save(subService),
-      ),
     );
   }
 
@@ -349,5 +336,98 @@ export class MockService implements OnModuleInit {
     return await Promise.all(
       users.map((user) => this.userRepository.save(user)),
     );
+  }
+
+  async createUserRewards(users, rewards) {
+    const userRewards = [
+      {
+        userId: users[0].id,
+        rewardId: rewards[0].id,
+        dateRedeem: new Date(),
+      },
+      {
+        userId: users[1].id,
+        rewardId: rewards[1].id,
+        dateRedeem: new Date(),
+      },
+    ];
+
+    return await Promise.all(
+      userRewards.map((userReward) =>
+        this.userRewardRepository.save(userReward),
+      ),
+    );
+  }
+
+  async createWashes(users, washHalls, rewards) {
+    const washes = [
+      {
+        washDatetime: new Date(),
+        washHallId: washHalls[0].id,
+        pointsGained: 50,
+        userId: users[0].id,
+        reward: false,
+      },
+      {
+        washDatetime: new Date(Date.now() - 86400000), // Yesterday
+        washHallId: washHalls[1].id,
+        pointsGained: 75,
+        userId: users[1].id,
+        reward: true,
+        rewardId: rewards[0].id,
+      },
+      {
+        washDatetime: new Date(Date.now() - 172800000), // 2 days ago
+        washHallId: washHalls[2].id,
+        pointsGained: 100,
+        userId: users[2].id,
+        reward: false,
+      },
+    ];
+
+    return await Promise.all(
+      washes.map((wash) => this.washRepository.save(wash)),
+    );
+  }
+
+  async createFeedbackReports(users, problems, washes) {
+    const feedbackReports = [
+      {
+        title: 'Great Service',
+        description: 'The staff was very friendly and helpful',
+        rating: 'excellent',
+        problemId: null,
+        userId: users[0].id,
+      },
+      {
+        title: 'Water Pressure Issues',
+        description: 'The water pressure was too low during my wash',
+        rating: 'average',
+        problemId: problems[1].id,
+        userId: users[1].id,
+      },
+      {
+        title: 'Soap Issues',
+        description: 'Not enough soap was dispensed during the wash cycle',
+        rating: 'poor',
+        problemId: problems[2].id,
+        userId: users[2].id,
+      },
+    ];
+
+    // Create feedback reports
+    const reports = await Promise.all(
+      feedbackReports.map((report) =>
+        this.feedbackReportRepository.save(report),
+      ),
+    );
+
+    // Link first feedback to first wash
+    if (washes && washes.length > 0 && reports && reports.length > 0) {
+      washes[0].feedbackId = reports[0].id;
+      await this.washRepository.save(washes[0]);
+    }
+
+    return reports;
   }
 }

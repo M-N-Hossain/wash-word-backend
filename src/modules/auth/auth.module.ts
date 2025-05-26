@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Subscription } from 'src/modules/subscriptions/entities/subscription.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import { UsersModule } from 'src/modules/users/users.module';
 import { AuthController } from './auth.controller';
@@ -25,7 +26,7 @@ dotenv.config();
       secret: process.env.SECRET_KEY,
       signOptions: { expiresIn: '1h' },
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Subscription]),
     ConfigModule,
   ],
   controllers: [AuthController],

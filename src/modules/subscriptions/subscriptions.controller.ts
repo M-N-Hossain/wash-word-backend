@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { SubscriptionsService } from './subscriptions.service';
 
-@Controller('subscriptions')
+@Controller('api/subscriptions')
 export class SubscriptionsController {
   constructor(private readonly subscriptionsService: SubscriptionsService) {}
 
@@ -13,10 +13,5 @@ export class SubscriptionsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.subscriptionsService.findOne(id);
-  }
-
-  @Get(':id/services')
-  getSubscriptionServices(@Param('id') id: string) {
-    return this.subscriptionsService.getSubscriptionServices(id);
   }
 }
