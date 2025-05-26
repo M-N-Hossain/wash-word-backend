@@ -2,7 +2,7 @@ import { Membership } from 'src/common/enums/membership.enum';
 
 export class JwtPayloadDto {
   email: string;
-  id: number;
+  id: string;
   licensePlate: string;
   membership: Membership;
 }

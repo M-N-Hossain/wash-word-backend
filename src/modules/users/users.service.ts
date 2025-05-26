@@ -26,13 +26,40 @@ export class UsersService {
     return user;
   }
 
-  findOne(id: number): Promise<User> {
-    const foundUser = this.userRepository.findOneBy({ id });
-    return foundUser;
+  findOne(id: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: { id },
+      relations: ['subscription'],
+    });
   }
 
   async findByEmail(email: string): Promise<User | undefined> {
-    return await this.userRepository.findOne({ where: { email } });
+    return await this.userRepository.findOne({
+      where: { email },
+      relations: ['subscription'],
+    });
+  }
+
+  async updateSubscription(
+    userId: string,
+    subscriptionId: string,
+  ): Promise<User> {
+    const user = await this.findOne(userId);
+    user.subscriptionId = subscriptionId;
+    return this.userRepository.save(user);
+  }
+
+  async getSubscriptionDetails(userId: string) {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: [
+        'subscription',
+        'subscription.subscriptionServices',
+        'subscription.subscriptionServices.service',
+      ],
+    });
+
+    return user?.subscription;
   }
 
   // update(id: number, updateUserDto: UpdateUserDto) {
