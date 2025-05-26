@@ -1,7 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
-import { Membership } from 'src/common/enums/membership.enum';
 import { Repository } from 'typeorm';
 import { FeedbackReport } from '../feedback/entities/feedback-report.entity';
 import { WashLocation } from '../locations/entities/wash-location.entity';
@@ -309,7 +308,6 @@ export class MockService implements OnModuleInit {
         licensePlate: 'ABC123',
         points: 150,
         subscriptionId: defaultSubscriptionId,
-        membership: Membership.GOLD,
       },
       {
         firstname: 'Jane',
@@ -319,7 +317,6 @@ export class MockService implements OnModuleInit {
         licensePlate: 'XYZ789',
         points: 300,
         subscriptionId: defaultSubscriptionId,
-        membership: Membership.PREMIUM,
       },
       {
         firstname: 'Bob',
@@ -329,7 +326,6 @@ export class MockService implements OnModuleInit {
         licensePlate: 'DEF456',
         points: 50,
         subscriptionId: defaultSubscriptionId,
-        membership: Membership.BRILLANT,
       },
     ];
 

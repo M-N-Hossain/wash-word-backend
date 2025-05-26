@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -44,27 +45,42 @@ export class UsersService {
     userId: string,
     subscriptionId: string,
   ): Promise<User> {
-    const user = await this.findOne(userId);
-    user.subscriptionId = subscriptionId;
-    return this.userRepository.save(user);
-  }
+    // First, update the user's subscription directly using a query
+    await this.userRepository
+      .createQueryBuilder()
+      .update(User)
+      .set({ subscriptionId: subscriptionId })
+      .where('id = :userId', { userId })
+      .execute();
 
-  async getSubscriptionDetails(userId: string) {
-    const user = await this.userRepository.findOne({
+    // Then fetch the fresh user data with the updated subscription
+    return this.userRepository.findOne({
       where: { id: userId },
-      relations: [
-        'subscription',
-        'subscription.subscriptionServices',
-        'subscription.subscriptionServices.service',
-      ],
+      relations: ['subscription'],
     });
-
-    return user?.subscription;
   }
 
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
+  // async getSubscriptionDetails(userId: string) {
+  //   const user = await this.userRepository.findOne({
+  //     where: { id: userId },
+  //     relations: [
+  //       'subscription',
+  //       'subscription.subscriptionServices',
+  //       'subscription.subscriptionServices.service',
+  //     ],
+  //   });
+
+  //   return user?.subscription;
   // }
+
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id);
+    return this.userRepository.save({
+      ...user,
+      ...updateUserDto,
+      updatedAt: new Date(),
+    });
+  }
 
   // remove(id: number) {
   //   return `This action removes a #${id} user`;

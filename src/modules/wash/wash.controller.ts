@@ -13,9 +13,9 @@ export class WashController {
     return this.washService.create(createWashDto);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  findByUserId(@Param('id') id: number) {
-    return this.washService.findByUserId(id);
-  }
+  // @UseGuards(JwtAuthGuard)
+  // @Get(':id')
+  // findByUserId(@Param('id') id: number) {
+  //   return this.washService.findByUserId(id);
+  // }
 }
