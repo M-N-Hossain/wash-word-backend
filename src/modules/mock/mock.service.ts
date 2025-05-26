@@ -301,8 +301,8 @@ export class MockService implements OnModuleInit {
 
     const users = [
       {
-        firstname: 'John',
-        lastname: 'Doe',
+        firstName: 'John',
+        lastName: 'Doe',
         email: 'john@example.com',
         password: hashedPassword1,
         licensePlate: 'ABC123',
@@ -310,8 +310,8 @@ export class MockService implements OnModuleInit {
         subscriptionId: defaultSubscriptionId,
       },
       {
-        firstname: 'Jane',
-        lastname: 'Smith',
+        firstName: 'Jane',
+        lastName: 'Smith',
         email: 'jane@example.com',
         password: hashedPassword2,
         licensePlate: 'XYZ789',
@@ -319,8 +319,8 @@ export class MockService implements OnModuleInit {
         subscriptionId: defaultSubscriptionId,
       },
       {
-        firstname: 'Bob',
-        lastname: 'Johnson',
+        firstName: 'Bob',
+        lastName: 'Johnson',
         email: 'bob@example.com',
         password: hashedPassword3,
         licensePlate: 'DEF456',

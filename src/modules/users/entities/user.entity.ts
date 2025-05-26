@@ -17,10 +17,10 @@ export class User {
   id: string;
 
   @Column()
-  firstname: string;
+  firstName: string;
 
   @Column()
-  lastname: string;
+  lastName: string;
 
   @Column()
   password: string;
