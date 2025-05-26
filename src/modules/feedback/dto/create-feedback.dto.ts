@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
-export class createFeedbackDto {
+export class CreateFeedbackDto {
   @IsString()
   @IsNotEmpty()
   comment: number;
@@ -16,4 +16,8 @@ export class createFeedbackDto {
   @IsNumber()
   @IsNotEmpty()
   reason_id: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  user_id: number;
 }
