@@ -1,11 +1,11 @@
 import { Membership } from 'src/common/enums/membership.enum';
 import {
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    OneToMany,
-    PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { FeedbackReport } from '../../feedback/entities/feedback-report.entity';
 import { UserReward } from '../../rewards/entities/user-reward.entity';
