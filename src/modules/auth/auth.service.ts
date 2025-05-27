@@ -46,21 +46,29 @@ export class AuthService {
       email: user.email,
       id: user.id,
       licensePlate: user.licensePlate,
-      membership: user.membership,
+      subscriptionId: user.subscriptionId,
     };
 
     return new LoginResponseDto(this.jwtService.sign(payload));
   }
 
   private async getDefaultSubscriptionId(): Promise<string> {
-    // Find the basic/cheapest subscription or the first one available
-    const subscription = await this.subscriptionRepository.findOne({
-      where: { tierName: 'Basic' },
-      order: { price: 'ASC' },
+    // First try to find a subscription named 'Basic', 'Gold', or any available subscription
+    let subscription = await this.subscriptionRepository.findOne({
+      where: [{ tierName: 'Basic' }, { tierName: 'Gold' }],
     });
 
+    // If not found, just get the first available subscription
     if (!subscription) {
-      throw new Error('No subscription found in the database');
+      subscription = await this.subscriptionRepository.findOne({
+        order: { price: 'ASC' },
+      });
+    }
+
+    if (!subscription) {
+      throw new Error(
+        'No subscription found in the database. Please ensure subscriptions are properly seeded.',
+      );
     }
 
     return subscription.id;
@@ -71,11 +79,6 @@ export class AuthService {
 
     if (userExists) {
       throw new ConflictException('User with this email already exists');
-    }
-
-    // If no subscriptionId is provided, use a default one
-    if (!user.subscriptionId) {
-      user.subscriptionId = await this.getDefaultSubscriptionId();
     }
 
     await this.userService.create(user);

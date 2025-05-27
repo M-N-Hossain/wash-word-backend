@@ -26,9 +26,9 @@ export class WashService {
     return this.washRepository.save(wash);
   }
 
-  findByUserId(userId: number) {
-    return this.washRepository.find({
-      where: { user: { id: userId } },
-    });
-  }
+  // findByUserId(userId: number) {
+  //   return this.washRepository.find({
+  //     where: { user: { id: userId } },
+  //   });
+  // }
 }
