@@ -405,6 +405,7 @@ export class MockService implements OnModuleInit {
         rating: 'average',
         problemId: problems[1].id,
         userId: users[1].id,
+        washId: washes[1].id,
       },
       {
         title: 'Soap Issues',
@@ -412,6 +413,7 @@ export class MockService implements OnModuleInit {
         rating: 'poor',
         problemId: problems[2].id,
         userId: users[2].id,
+        washId: washes[2].id,
       },
     ];
 
