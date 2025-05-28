@@ -1,4 +1,3 @@
-import { Membership } from 'src/common/enums/membership.enum';
 import {
   Column,
   Entity,
@@ -18,10 +17,10 @@ export class User {
   id: string;
 
   @Column()
-  firstname: string;
+  firstName: string;
 
   @Column()
-  lastname: string;
+  lastName: string;
 
   @Column()
   password: string;
@@ -48,13 +47,6 @@ export class User {
 
   @Column({ type: 'int', default: 0 })
   points: number;
-
-  @Column({
-    type: 'enum',
-    enum: Membership,
-    default: Membership.GOLD,
-  })
-  membership: Membership;
 
   @ManyToOne(() => Subscription)
   @JoinColumn({ name: 'fk_sub_id' })
