@@ -1,5 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { Membership } from 'src/common/enums/membership.enum';
+import { IsEmail, IsNotEmpty, IsString, IsUUID } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -22,10 +21,10 @@ export class CreateUserDto {
   @IsNotEmpty()
   password: string;
 
-  @IsString()
+  @IsUUID()
   @IsNotEmpty()
-  membership: Membership;
+  subscriptionId: string;
 
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

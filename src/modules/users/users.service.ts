@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import * as bcrypt from 'bcrypt';
 import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -26,18 +27,60 @@ export class UsersService {
     return user;
   }
 
-  findOne(id: number): Promise<User> {
-    const foundUser = this.userRepository.findOneBy({ id });
-    return foundUser;
+  findOne(id: string): Promise<User> {
+    return this.userRepository.findOne({
+      where: { id },
+      relations: ['subscription'],
+    });
   }
 
   async findByEmail(email: string): Promise<User | undefined> {
-    return await this.userRepository.findOne({ where: { email } });
+    return await this.userRepository.findOne({
+      where: { email },
+      relations: ['subscription'],
+    });
   }
 
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
+  async updateSubscription(
+    userId: string,
+    subscriptionId: string,
+  ): Promise<User> {
+    // First, update the user's subscription directly using a query
+    await this.userRepository
+      .createQueryBuilder()
+      .update(User)
+      .set({ subscriptionId: subscriptionId })
+      .where('id = :userId', { userId })
+      .execute();
+
+    // Then fetch the fresh user data with the updated subscription
+    return this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['subscription'],
+    });
+  }
+
+  // async getSubscriptionDetails(userId: string) {
+  //   const user = await this.userRepository.findOne({
+  //     where: { id: userId },
+  //     relations: [
+  //       'subscription',
+  //       'subscription.subscriptionServices',
+  //       'subscription.subscriptionServices.service',
+  //     ],
+  //   });
+
+  //   return user?.subscription;
   // }
+
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const user = await this.findOne(id);
+    return this.userRepository.save({
+      ...user,
+      ...updateUserDto,
+      updatedAt: new Date(),
+    });
+  }
 
   // remove(id: number) {
   //   return `This action removes a #${id} user`;

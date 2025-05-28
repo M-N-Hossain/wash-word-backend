@@ -1,11 +1,20 @@
-import { Membership } from 'src/common/enums/membership.enum';
-import { Wash } from 'src/modules/wash/entities/wash.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { FeedbackReport } from '../../feedback/entities/feedback-report.entity';
+import { UserReward } from '../../rewards/entities/user-reward.entity';
+import { Subscription } from '../../subscriptions/entities/subscription.entity';
+import { Wash } from '../../washes/entities/wash.entity';
 
-@Entity()
+@Entity('users')
 export class User {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid', { name: 'user_id' })
+  id: string;
 
   @Column()
   firstName: string;
@@ -14,23 +23,44 @@ export class User {
   lastName: string;
 
   @Column()
-  licensePlate: string;
-
-  @Column()
-  email: string;
-
-  @Column()
   password: string;
 
-  @Column()
-  membership: Membership;
+  @Column({ unique: true })
+  email: string;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({
+    name: 'created_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   createdAt: Date;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @Column({
+    name: 'updated_at',
+    type: 'timestamp',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   updatedAt: Date;
+
+  @Column({ name: 'license_plate' })
+  licensePlate: string;
+
+  @Column({ type: 'int', default: 0 })
+  points: number;
+
+  @ManyToOne(() => Subscription)
+  @JoinColumn({ name: 'fk_sub_id' })
+  subscription: Subscription;
+
+  @Column({ name: 'fk_sub_id' })
+  subscriptionId: string;
+
+  @OneToMany(() => UserReward, (userReward) => userReward.user)
+  userRewards: UserReward[];
 
   @OneToMany(() => Wash, (wash) => wash.user)
   washes: Wash[];
+
+  @OneToMany(() => FeedbackReport, (feedbackReport) => feedbackReport.user)
+  feedbackReports: FeedbackReport[];
 }
