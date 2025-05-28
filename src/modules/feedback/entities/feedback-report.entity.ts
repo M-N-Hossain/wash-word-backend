@@ -1,12 +1,14 @@
 import {
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Problem } from '../../problems/entities/problem.entity';
 import { User } from '../../users/entities/user.entity';
+import { Wash } from 'src/modules/washes/entities/wash.entity';
 
 @Entity('feedback_report')
 export class FeedbackReport {
@@ -35,4 +37,11 @@ export class FeedbackReport {
 
   @Column({ name: 'fk_user_id' })
   userId: string;
+
+  @OneToOne(() => Wash, (wash) => wash.feedbackReport)
+  @JoinColumn({ name: 'fk_wash_id' })
+  wash?: Wash;
+
+  @Column({ name: 'fk_wash_id' })
+  washId: string;
 }

@@ -11,10 +11,6 @@ export class CreateWashesDto {
   points_gained: number;
 
   @IsString()
-  @IsOptional()
-  fk_feedback_id?: string;
-
-  @IsString()
   fk_user_id: string;
 
   @IsString()
@@ -25,6 +21,7 @@ export class CreateWashesDto {
   reward: boolean;
 
   @IsString()
+  @IsOptional()
   fk_reward_id?: string;
 
   @IsDate()

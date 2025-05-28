@@ -367,6 +367,7 @@ export class MockService implements OnModuleInit {
         pointsGained: 50,
         userId: users[0].id,
         reward: false,
+        washLocation: 'Egevej 4, 6200 Aabenraa',
       },
       {
         washDatetime: new Date(Date.now() - 86400000), // Yesterday
@@ -375,6 +376,7 @@ export class MockService implements OnModuleInit {
         userId: users[1].id,
         reward: true,
         rewardId: rewards[0].id,
+        washLocation: 'Egevej 4, 6200 Aabenraa',
       },
       {
         washDatetime: new Date(Date.now() - 172800000), // 2 days ago
@@ -382,6 +384,7 @@ export class MockService implements OnModuleInit {
         pointsGained: 100,
         userId: users[2].id,
         reward: false,
+        washLocation: 'Egevej 4, 6200 Aabenraa',
       },
     ];
 
@@ -398,6 +401,7 @@ export class MockService implements OnModuleInit {
         rating: 'excellent',
         problemId: null,
         userId: users[0].id,
+        washId: washes[1].id,
       },
       {
         title: 'Water Pressure Issues',

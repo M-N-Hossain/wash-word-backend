@@ -3,10 +3,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Reward } from '../../rewards/entities/reward.entity';
 import { User } from '../../users/entities/user.entity';
+import { FeedbackReport } from 'src/modules/feedback/entities/feedback-report.entity';
 
 @Entity('washes')
 export class Wash {
@@ -22,9 +24,6 @@ export class Wash {
 
   @Column({ name: 'points_gained', type: 'int', default: 0 })
   pointsGained: number;
-
-  @Column({ name: 'fk_feedback_id', nullable: true })
-  feedbackId: string;
 
   @ManyToOne(() => User, (user) => user.washes)
   @JoinColumn({ name: 'fk_user_id' })
@@ -44,5 +43,10 @@ export class Wash {
   rewardUsed: Reward;
 
   @Column({ name: 'fk_reward_id', nullable: true })
-  rewardId: string;
+  rewardId?: string;
+
+  @OneToOne(() => FeedbackReport, (feedbackReport) => feedbackReport.wash, {
+    nullable: true,
+  })
+  feedbackReport?: FeedbackReport;
 }
