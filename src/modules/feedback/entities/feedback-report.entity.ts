@@ -21,15 +21,15 @@ export class FeedbackReport {
   @Column({ type: 'varchar' })
   description: string;
 
-  @Column({ type: 'enum', enum: ['poor', 'average', 'good', 'excellent'] })
-  rating: string;
+  @Column({ type: 'enum', enum: [1, 2, 3, 4, 5] })
+  rating: number;
 
   @ManyToOne(() => Problem)
   @JoinColumn({ name: 'fk_problem_id' })
   problem: Problem;
 
   @Column({ name: 'fk_problem_id', nullable: true })
-  problemId: string;
+  problemId?: string;
 
   @ManyToOne(() => User, (user) => user.feedbackReports)
   @JoinColumn({ name: 'fk_user_id' })

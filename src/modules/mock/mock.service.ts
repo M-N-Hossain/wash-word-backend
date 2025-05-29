@@ -394,7 +394,7 @@ export class MockService implements OnModuleInit {
       {
         title: 'Great Service',
         description: 'The staff was very friendly and helpful',
-        rating: 'excellent',
+        rating: 5,
         problemId: null,
         userId: users[0].id,
         washId: washes[1].id,
@@ -402,7 +402,7 @@ export class MockService implements OnModuleInit {
       {
         title: 'Water Pressure Issues',
         description: 'The water pressure was too low during my wash',
-        rating: 'average',
+        rating: 3,
         problemId: problems[1].id,
         userId: users[1].id,
         washId: washes[1].id,
@@ -410,7 +410,7 @@ export class MockService implements OnModuleInit {
       {
         title: 'Soap Issues',
         description: 'Not enough soap was dispensed during the wash cycle',
-        rating: 'poor',
+        rating: 1,
         problemId: problems[2].id,
         userId: users[2].id,
         washId: washes[2].id,

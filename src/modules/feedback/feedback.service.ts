@@ -1,28 +1,36 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Feedback } from './entities/feedback.entity';
 import { Repository } from 'typeorm';
 import { UsersService } from '../users/users.service';
-import { CreateFeedbackDto } from './dto/create-feedback.dto';
+import { FeedbackReport } from './entities/feedback-report.entity';
+import { CreateFeedbackReportDto } from './dto/create-feedbackReport.dto';
 
 @Injectable()
 export class FeedbackService {
   constructor(
-    @InjectRepository(Feedback)
-    private feedbackRepository: Repository<Feedback>,
+    @InjectRepository(FeedbackReport)
+    private feedbackRepository: Repository<FeedbackReport>,
     private readonly usersService: UsersService,
   ) {}
 
-  async create(createFeedbackDto: CreateFeedbackDto) {
-    const user = await this.usersService.findOne(createFeedbackDto.user_id);
+  async create(createFeedbackReportDto: CreateFeedbackReportDto) {
+    const user = await this.usersService.findOne(
+      createFeedbackReportDto.userId,
+    );
     if (!user) {
       throw new NotFoundException('User not found');
     }
 
-    const feedback = this.feedbackRepository.create({
-        createFeedbackDto,
-        user: user,
+    const feedbackReport = this.feedbackRepository.create({
+      ...createFeedbackReportDto,
+      user: user,
     });
-    return this.feedbackRepository.save(feedback);
+    return this.feedbackRepository.save(feedbackReport);
+  }
+
+  async findByUserId(userId: number) {
+    return this.feedbackRepository.find({
+      where: { user: { id: String(userId) } },
+    });
   }
 }
