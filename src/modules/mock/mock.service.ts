@@ -397,7 +397,7 @@ export class MockService implements OnModuleInit {
         rating: 5,
         problemId: null,
         userId: users[0].id,
-        washId: washes[1].id,
+        washId: washes[0].id,
       },
       {
         title: 'Water Pressure Issues',
@@ -423,12 +423,6 @@ export class MockService implements OnModuleInit {
         this.feedbackReportRepository.save(report),
       ),
     );
-
-    // Link first feedback to first wash
-    if (washes && washes.length > 0 && reports && reports.length > 0) {
-      washes[0].feedbackId = reports[0].id;
-      await this.washRepository.save(washes[0]);
-    }
 
     return reports;
   }
