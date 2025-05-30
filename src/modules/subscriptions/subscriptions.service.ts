@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Subscription } from './entities/subscription.entity';
@@ -15,9 +15,10 @@ export class SubscriptionsService {
   }
 
   async findOne(id: string): Promise<Subscription> {
-    return this.subscriptionRepository.findOne({
-      where: { id },
-      relations: ['subscriptionServices', 'subscriptionServices.service'],
-    });
+    const subscription = await this.subscriptionRepository.findOne({ where: { id } });
+    if (!subscription) {
+      throw new NotFoundException('Subscription not found');
+    }
+    return subscription;
   }
 }
