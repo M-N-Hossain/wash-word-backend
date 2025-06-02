@@ -49,7 +49,7 @@ describe('SubscriptionsController (e2e)', () => {
   });
 
   it('/api/subscriptions/:id (GET) should return a subscription for a valid id', async () => {
-    const validId = 'e4eb5778-3414-4931-9a80-48266806cbaf';
+    const validId = '8d857766-7ba4-4cef-8fab-a8ae38e90c9f';
     const res = await request(app.getHttpServer())
       .get(`/api/subscriptions/${validId}`)
       .expect(200);
