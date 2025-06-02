@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Repository } from 'typeorm';
-import { Wash } from '../washes/entities/wash.entity';
-import { UsersService } from '../users/users.service';
-import { CreateWashesDto } from './dto/create-washes.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { UsersService } from '../users/users.service';
+import { Wash } from '../washes/entities/wash.entity';
+import { CreateWashesDto } from './dto/create-washes.dto';
 
 @Injectable()
 export class WashesService {
@@ -23,7 +23,7 @@ export class WashesService {
       pointsGained: createWashesDto.points_gained,
       userId: createWashesDto.fk_user_id,
       reward: createWashesDto.reward,
-      rewardId: createWashesDto.fk_reward_id,
+      rewardName: createWashesDto.reward_name,
       washLocation: createWashesDto.wash_location,
       washDatetime: new Date(),
     });

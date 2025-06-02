@@ -21,12 +21,8 @@ async function bootstrap() {
     .addTag('users')
     .addTag('washes')
     .addTag('subscriptions')
-    .addTag('rewards')
     .addTag('feedback')
-    .addTag('wash-halls')
-    .addTag('services')
-    .addTag('problems')
-    .addTag('locations')
+    .addTag('mock')
     .addBearerAuth(
       {
         type: 'http',

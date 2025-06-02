@@ -38,12 +38,12 @@ export class CreateWashesDto {
   reward: boolean;
 
   @ApiPropertyOptional({
-    description: 'The ID of the reward used for this wash, if any',
-    example: '123e4567-e89b-12d3-a456-426614174000',
+    description: 'The name of the reward used for this wash, if any',
+    example: 'Free Basic Wash',
   })
   @IsString()
   @IsOptional()
-  fk_reward_id?: string;
+  reward_name?: string;
 
   @ApiPropertyOptional({
     description: 'The date and time when the wash occurred',
