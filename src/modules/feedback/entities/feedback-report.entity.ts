@@ -8,7 +8,6 @@ import {
     OneToOne,
     PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Problem } from '../../problems/entities/problem.entity';
 import { User } from '../../users/entities/user.entity';
 
 @Entity('feedback_report')
@@ -43,19 +42,11 @@ export class FeedbackReport {
   rating: number;
 
   @ApiPropertyOptional({
-    description: 'The problem category associated with the feedback',
-    type: () => Problem,
+    description: 'Problem description (if any)',
+    example: 'Water pressure issue',
   })
-  @ManyToOne(() => Problem)
-  @JoinColumn({ name: 'fk_problem_id' })
-  problem: Problem;
-
-  @ApiPropertyOptional({
-    description: 'The ID of the problem category',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-  })
-  @Column({ name: 'fk_problem_id', nullable: true })
-  problemId?: string;
+  @Column({ type: 'varchar', nullable: true })
+  problemDescription?: string;
 
   @ApiProperty({
     description: 'The user who submitted the feedback',

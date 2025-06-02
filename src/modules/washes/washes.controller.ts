@@ -1,10 +1,18 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import {
-    ApiBearerAuth,
-    ApiOperation,
-    ApiParam,
-    ApiResponse,
-    ApiTags,
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiTags,
 } from '@nestjs/swagger';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CreateWashesDto } from './dto/create-washes.dto';
@@ -25,7 +33,7 @@ export class WashesController {
   @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createWashesDto: CreateWashesDto) {
+  create(@Req() req, @Body() createWashesDto: CreateWashesDto) {
     return this.washesService.create(createWashesDto);
   }
 

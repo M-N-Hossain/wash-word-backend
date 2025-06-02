@@ -1,14 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { FeedbackReport } from 'src/modules/feedback/entities/feedback-report.entity';
 import {
-    Column,
-    Entity,
-    JoinColumn,
-    ManyToOne,
-    OneToOne,
-    PrimaryGeneratedColumn,
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Reward } from '../../rewards/entities/reward.entity';
 import { User } from '../../users/entities/user.entity';
 
 @Entity('washes')
@@ -68,19 +67,11 @@ export class Wash {
   washLocation?: string;
 
   @ApiPropertyOptional({
-    description: 'The reward used for this wash, if any',
-    type: () => Reward,
+    description: 'The reward name used for this wash, if any',
+    example: 'Free Basic Wash',
   })
-  @ManyToOne(() => Reward)
-  @JoinColumn({ name: 'fk_reward_id' })
-  rewardUsed: Reward;
-
-  @ApiPropertyOptional({
-    description: 'The ID of the reward used for this wash, if any',
-    example: '123e4567-e89b-12d3-a456-426614174000',
-  })
-  @Column({ name: 'fk_reward_id', nullable: true })
-  rewardId?: string;
+  @Column({ name: 'reward_name', nullable: true })
+  rewardName?: string;
 
   @ApiPropertyOptional({
     description: 'The feedback report associated with this wash, if any',

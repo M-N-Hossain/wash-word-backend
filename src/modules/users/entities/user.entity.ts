@@ -8,7 +8,6 @@ import {
     PrimaryGeneratedColumn,
 } from 'typeorm';
 import { FeedbackReport } from '../../feedback/entities/feedback-report.entity';
-import { UserReward } from '../../rewards/entities/user-reward.entity';
 import { Subscription } from '../../subscriptions/entities/subscription.entity';
 import { Wash } from '../../washes/entities/wash.entity';
 
@@ -100,13 +99,6 @@ export class User {
   })
   @Column({ name: 'fk_sub_id' })
   subscriptionId: string;
-
-  @ApiProperty({
-    description: 'The rewards redeemed by the user',
-    type: () => [UserReward],
-  })
-  @OneToMany(() => UserReward, (userReward) => userReward.user)
-  userRewards: UserReward[];
 
   @ApiProperty({
     description: 'The wash history of the user',
