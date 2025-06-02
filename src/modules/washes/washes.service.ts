@@ -21,7 +21,6 @@ export class WashesService {
 
     const wash = this.washRepository.create({
       pointsGained: createWashesDto.points_gained,
-      feedbackId: createWashesDto.fk_feedback_id,
       userId: createWashesDto.fk_user_id,
       reward: createWashesDto.reward,
       rewardId: createWashesDto.fk_reward_id,

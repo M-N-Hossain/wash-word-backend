@@ -363,7 +363,7 @@ export class MockService implements OnModuleInit {
         pointsGained: 50,
         userId: users[0].id,
         reward: false,
-        WashLocation: 'Egevej 4, 6200 Aabenraa',
+        washLocation: 'Egevej 4, 6200 Aabenraa',
       },
       {
         washDatetime: new Date(Date.now() - 86400000), // Yesterday
@@ -372,7 +372,7 @@ export class MockService implements OnModuleInit {
         userId: users[1].id,
         reward: true,
         rewardId: rewards[0].id,
-        WashLocation: 'Egevej 4, 6200 Aabenraa',
+        washLocation: 'Egevej 4, 6200 Aabenraa',
       },
       {
         washDatetime: new Date(Date.now() - 172800000), // 2 days ago
@@ -394,23 +394,26 @@ export class MockService implements OnModuleInit {
       {
         title: 'Great Service',
         description: 'The staff was very friendly and helpful',
-        rating: 'excellent',
+        rating: 5,
         problemId: null,
         userId: users[0].id,
+        washId: washes[0].id,
       },
       {
         title: 'Water Pressure Issues',
         description: 'The water pressure was too low during my wash',
-        rating: 'average',
+        rating: 3,
         problemId: problems[1].id,
         userId: users[1].id,
+        washId: washes[1].id,
       },
       {
         title: 'Soap Issues',
         description: 'Not enough soap was dispensed during the wash cycle',
-        rating: 'poor',
+        rating: 1,
         problemId: problems[2].id,
         userId: users[2].id,
+        washId: washes[2].id,
       },
     ];
 
@@ -420,12 +423,6 @@ export class MockService implements OnModuleInit {
         this.feedbackReportRepository.save(report),
       ),
     );
-
-    // Link first feedback to first wash
-    if (washes && washes.length > 0 && reports && reports.length > 0) {
-      washes[0].feedbackId = reports[0].id;
-      await this.washRepository.save(washes[0]);
-    }
 
     return reports;
   }
