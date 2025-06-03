@@ -62,14 +62,6 @@ export class UsersController {
     description: 'User information updated successfully',
     type: User,
   })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  @ApiBearerAuth('JWT-auth')
-  @UseGuards(JwtAuthGuard)
-  @Put(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
-  }
-
   @ApiOperation({ summary: 'Update user subscription' })
   @ApiResponse({
     status: 200,
@@ -79,8 +71,8 @@ export class UsersController {
   @ApiResponse({ status: 404, description: 'User or subscription not found' })
   @ApiBearerAuth('JWT-auth')
   @UseGuards(JwtAuthGuard)
-  @Put('subscription')
-  updateSubscription(
+  @Put('change-subscription')
+  changeSubscription(
     @Request() req,
     @Body() updateSubscriptionDto: UpdateSubscriptionDto,
   ) {
@@ -88,5 +80,13 @@ export class UsersController {
       req.user.id,
       updateSubscriptionDto.subscriptionId,
     );
+  }
+
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiBearerAuth('JWT-auth')
+  @UseGuards(JwtAuthGuard)
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.usersService.update(id, updateUserDto);
   }
 }
